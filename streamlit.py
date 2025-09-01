@@ -57,7 +57,7 @@ def show_intro_page():
             st.session_state.current_question = 0
             st.session_state.score = 0
             st.session_state.quiz_completed = False
-            st.experimental_rerun()
+            st.rerun()
 
 
 # --- Page 2: The Quiz Itself ---
