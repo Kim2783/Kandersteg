@@ -89,7 +89,7 @@ def show_quiz_page():
                 else:
                     st.error(f"Incorrect. The correct answer was: {q['answer']}")
                 st.session_state.current_question += 1
-                st.experimental_rerun()
+                st.rerun()
     else:
         st.session_state.quiz_completed = True
         st.title("Quiz Finished! 🎉")
