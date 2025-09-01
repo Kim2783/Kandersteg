@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 from gspread_pandas import Spread
 from gspread import service_account_from_dict 
+import json
 
 # Load the secret once outside the functions
 # This is a good practice to avoid reloading the secret on every function call
