@@ -3,14 +3,23 @@ import pandas as pd
 from gspread_pandas import Spread
 from gspread import service_account_from_dict 
 
-# Your sheet name from Google Sheets
-SPREADSHEET_NAME = "Kandersteg_Quiz_Leaderboard"
+# Load the secret once outside the functions
+# This is a good practice to avoid reloading the secret on every function call
+try:
+    service_account_str = st.secrets["gcp_service_account"]
+    creds_dict = json.loads(service_account_str)
+except KeyError:
+    st.error("Google Sheets credentials not found in secrets.toml.")
+    st.stop() # Stop the app if credentials are not found
 
+# Now modify the functions to use these credentials
 def submit_to_leaderboard(name, score):
     try:
-        # Use gspread_pandas to append a new row to the sheet
-        # You'll need to handle st.secrets based on the tutorial
-        spread = Spread(SPREADSHEET_NAME)
+        # Pass the credentials dictionary directly to the Spread object
+        spread = Spread(
+            spreadsheet=st.secrets["spreadsheet_name"], # Assume you have this in secrets too
+            creds=creds_dict
+        )
         data = pd.DataFrame([{"Name": name, "Score": score}])
         spread.df_to_sheets(data, index=False, start='A1', replace=False, headers=False)
     except Exception as e:
@@ -19,11 +28,15 @@ def submit_to_leaderboard(name, score):
 @st.cache_data
 def load_leaderboard_data():
     try:
-        spread = Spread(SPREADSHEET_NAME)
+        # Pass the credentials dictionary directly
+        spread = Spread(
+            spreadsheet=st.secrets["spreadsheet_name"],
+            creds=creds_dict
+        )
         df = spread.sheet_to_df(index=False)
         return df
     except Exception as e:
-        st.warning("Could not load leaderboard data.")
+        st.warning(f"Could not load leaderboard data. Error: {e}")
         return pd.DataFrame(columns=["Name", "Score"])
         
 # --- Page 1: Introduction and Donation Call to Action ---
