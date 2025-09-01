@@ -16,7 +16,7 @@ def show_intro_page():
     st.info("Donations are handled through a secure PayPal link managed by the scout group. Your contribution is greatly appreciated!")
 
     # This is the crucial part for payment redirection
-    paypal_link = "YOUR_SCOUT_GROUP'S_PAYPAL_DONATION_LINK_HERE"
+    paypal_link = "https://www.paypal.com/donate?campaign_id=UJM5RGT9FMXGN&fbclid=IwY2xjawMi4whleHRuA2FlbQIxMQABHkMOASLwqaSCE8PFTEwRgbRhOWJF5Up2_mZqGfMqYL3uEOvjpji4RjQfuphV_aem_rzZ9uBUxPR5i_6RlkUBTcQ"
     st.markdown(f'<a href="{paypal_link}" target="_blank"><button style="background-color:#0070ba;color:white;border-radius:5px;border:none;padding:10px 20px;">Donate and Start the Quiz!</button></a>', unsafe_allow_html=True)
     
     st.markdown("---")
