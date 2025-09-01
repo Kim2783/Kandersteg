@@ -1,5 +1,30 @@
 import streamlit as st
+import pandas as pd
+from gspread_pandas import Spread
 
+# Your sheet name from Google Sheets
+SPREADSHEET_NAME = "Kandersteg_Quiz_Leaderboard"
+
+def submit_to_leaderboard(name, score):
+    try:
+        # Use gspread_pandas to append a new row to the sheet
+        # You'll need to handle st.secrets based on the tutorial
+        spread = Spread(SPREADSHEET_NAME)
+        data = pd.DataFrame([{"Name": name, "Score": score}])
+        spread.df_to_sheets(data, index=False, start='A1', replace=False, headers=False)
+    except Exception as e:
+        st.error(f"Error submitting to leaderboard: {e}")
+
+@st.cache_data
+def load_leaderboard_data():
+    try:
+        spread = Spread(SPREADSHEET_NAME)
+        df = spread.sheet_to_df(index=False)
+        return df
+    except Exception as e:
+        st.warning("Could not load leaderboard data.")
+        return pd.DataFrame(columns=["Name", "Score"])
+        
 # --- Page 1: Introduction and Donation Call to Action ---
 
 def show_intro_page():
