@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 from gspread_pandas import Spread
+from gspread import service_account_from_dict 
 
 # Your sheet name from Google Sheets
 SPREADSHEET_NAME = "Kandersteg_Quiz_Leaderboard"
