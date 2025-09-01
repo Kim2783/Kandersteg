@@ -14,11 +14,12 @@ except KeyError:
     st.stop() # Stop the app if credentials are not found
 
 # Now modify the functions to use these credentials
+# The corrected function to submit data
 def submit_to_leaderboard(name, score):
     try:
-        # Pass the credentials dictionary directly to the Spread object
+        # Pass the spreadsheet name as the first argument
         spread = Spread(
-            spreadsheet=st.secrets["spreadsheet_name"], # Assume you have this in secrets too
+            st.secrets["spreadsheet_name"], 
             creds=creds_dict
         )
         data = pd.DataFrame([{"Name": name, "Score": score}])
@@ -26,12 +27,13 @@ def submit_to_leaderboard(name, score):
     except Exception as e:
         st.error(f"Error submitting to leaderboard: {e}")
 
+# The corrected function to load data
 @st.cache_data
 def load_leaderboard_data():
     try:
-        # Pass the credentials dictionary directly
+        # Pass the spreadsheet name as the first argument
         spread = Spread(
-            spreadsheet=st.secrets["spreadsheet_name"],
+            st.secrets["spreadsheet_name"], 
             creds=creds_dict
         )
         df = spread.sheet_to_df(index=False)
