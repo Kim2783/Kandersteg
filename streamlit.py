@@ -5,7 +5,7 @@ import streamlit as st
 def show_intro_page():
     st.title("Kandersteg Trivia Challenge! 🏔️")
     st.header("Help send our scout group to Switzerland!")
-    st.image("https://github.com/Kim2783/Kandersteg/blob/main/scouts%20image.png", caption="Your scout group photo here.") # Use a relevant image!
+    st.image("https://github.com/Kim2783/Kandersteg/blob/main/scouts%20jpeg.jpg", caption="Your scout group photo here.") # Use a relevant image!
 
     st.write("""
     Welcome to the Kandersteg Trivia Challenge! To help our scouts fund their trip to the amazing Kandersteg International Scout Centre in Switzerland, we're asking for a small donation to participate in this fun quiz.
