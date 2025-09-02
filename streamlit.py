@@ -34,16 +34,28 @@ def submit_to_leaderboard(name, score):
         st.error(f"Error submitting to leaderboard: {e}")
 
 # The corrected function to load data
+# The corrected function to submit data
+def submit_to_leaderboard(name, score):
+    try:
+        # CHANGED: Use the new client to open the spreadsheet by name.
+        spread = gspread_pandas_client.open(st.secrets["spreadsheet_name"])
+        
+        # The rest of the function stays the same...
+        data = pd.DataFrame([{"Name": name, "Score": score}])
+        spread.df_to_sheets(data, index=False, headers=False, start='A2', replace=False)
+        st.success("Your score has been added to the leaderboard!")
+    except Exception as e:
+        st.error(f"Error submitting to leaderboard: {e}")
+
+# The corrected function to load data
 @st.cache_data
 def load_leaderboard_data():
     try:
-        # Use the 'scoped_creds' object for authentication
-        spread = Spread(
-            st.secrets["spreadsheet_name"], 
-            creds=scoped_creds # CHANGED: Use the processed credentials object
-        )
+        # CHANGED: Use the new client to open the spreadsheet by name.
+        spread = gspread_pandas_client.open(st.secrets["spreadsheet_name"])
+
+        # The rest of the function stays the same...
         df = spread.sheet_to_df(index=False, header_rows=1)
-        # Ensure the 'Score' column is numeric for correct sorting
         if 'Score' in df.columns:
             df['Score'] = pd.to_numeric(df['Score'], errors='coerce')
         return df
