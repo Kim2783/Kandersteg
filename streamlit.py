@@ -1,23 +1,19 @@
 import streamlit as st
 import pandas as pd
-from gspread_pandas import Spread
+# CHANGED: Import 'Spread' and 'Client'
+from gspread_pandas import Spread, Client 
 from gspread import service_account_from_dict
-import json # Ensure json is imported
+import gspread # Ensure gspread is imported
+import json
 
 # --- CORRECTED CREDENTIALS LOADING ---
 try:
-    # 1. Get the secret as a string from secrets.toml
     service_account_str = st.secrets["gcp_service_account"]
-    
-    # 2. Parse the string into a dictionary using json.loads()
     creds_dict = json.loads(service_account_str) 
-    
-    # 3. Create the final credentials object that gspread needs
     scoped_creds = service_account_from_dict(creds_dict)
-
 except (KeyError, json.JSONDecodeError) as e:
     st.error(f"Error with Google Sheets credentials: {e}. Please check your secrets.toml file.")
-    st.stop() # Stop the app if credentials fail
+    st.stop()
 
 # --- CORRECTED FUNCTIONS ---
 
