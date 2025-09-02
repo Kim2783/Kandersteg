@@ -7,12 +7,15 @@ import json
 # Load the secret once outside the functions
 # This is a good practice to avoid reloading the secret on every function call
 try:
-    service_account_str = st.secrets["gcp_service_account"]
-    creds_dict = json.loads(service_account_str)
+    # 1. Streamlit automatically loads the secret as a dictionary. No json.loads() needed.
+    creds_dict = st.secrets["gcp_service_account"] 
+    
+    # 2. Use the function to create the proper credentials object.
+    scoped_creds = service_account_from_dict(creds_dict)
 except KeyError:
     st.error("Google Sheets credentials not found in secrets.toml.")
-    st.stop() # Stop the app if credentials are not found
-
+    st.stop()
+    
 # Now modify the functions to use these credentials
 # The corrected function to submit data
 def submit_to_leaderboard(name, score):
