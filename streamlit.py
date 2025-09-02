@@ -19,7 +19,9 @@ except (KeyError, json.JSONDecodeError) as e:
 # These clients are created once in the main script body.
 # All functions below can now see and use them.
 try:
-    gspread_client = gspread.authorize(scoped_creds)
+    # CHANGED: Use the modern gspread.Client constructor
+    gspread_client = gspread.Client(auth=scoped_creds)
+    
     gspread_pandas_client = Client(gspread_client)
 except Exception as e:
     st.error(f"Failed to authorize Google Sheets client: {e}")
