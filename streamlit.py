@@ -6,7 +6,6 @@ import gspread
 import json
 
 # --- 1. LOAD AND PARSE SECRETS ---
-# This block runs first to get the credentials.
 try:
     service_account_str = st.secrets["gcp_service_account"]
     creds_dict = json.loads(service_account_str)
@@ -16,10 +15,8 @@ except (KeyError, json.JSONDecodeError) as e:
     st.stop()
 
 # --- 2. CREATE THE CLIENTS (GLOBAL SCOPE) ---
-# These clients are created once in the main script body.
-# All functions below can now see and use them.
 try:
-    # CHANGED: Use the modern gspread.Client constructor
+    # ✅ THIS IS THE CORRECTED LINE
     gspread_client = gspread.Client(auth=scoped_creds)
     
     gspread_pandas_client = Client(gspread_client)
@@ -32,10 +29,8 @@ except Exception as e:
 def submit_to_leaderboard(name, score):
     """Submits a new score to the Google Sheet."""
     try:
-        # Use the globally defined client to open the spreadsheet.
         spread = gspread_pandas_client.open(st.secrets["spreadsheet_name"])
         data = pd.DataFrame([{"Name": name, "Score": score}])
-        # Append data to the sheet without headers.
         spread.df_to_sheets(data, index=False, headers=False, start='A2', replace=False)
         st.success("Your score has been added to the leaderboard!")
     except Exception as e:
@@ -45,7 +40,6 @@ def submit_to_leaderboard(name, score):
 def load_leaderboard_data():
     """Loads leaderboard data from the Google Sheet."""
     try:
-        # Use the globally defined client to open the spreadsheet.
         spread = gspread_pandas_client.open(st.secrets["spreadsheet_name"])
         df = spread.sheet_to_df(index=False, header_rows=1)
         if 'Score' in df.columns:
@@ -124,13 +118,11 @@ def show_leaderboard():
 
 # --- 4. MAIN APP LOGIC ---
 
-# Initialize session state variables
 if "quiz_started" not in st.session_state:
     st.session_state.quiz_started = False
 if "quiz_completed" not in st.session_state:
     st.session_state.quiz_completed = False
 
-# Control the page flow
 if not st.session_state.quiz_started:
     show_intro_page()
     show_leaderboard()
